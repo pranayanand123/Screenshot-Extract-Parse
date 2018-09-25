@@ -2,7 +2,9 @@ package com.example.pranay.demoapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +24,8 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     ImageView imgView;
     FirebaseVisionImage img;
-    Context context = getApplicationContext();
+    Bitmap bitmanp_image;
+    //Context context = getApplicationContext();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,33 +51,34 @@ public class MainActivity extends AppCompatActivity {
             // Update UI to reflect image being shared
             imgView.setImageURI(imageUri);
             try {
-                img = FirebaseVisionImage.fromFilePath(context, imageUri);
-                FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
-                        .getOnDeviceTextRecognizer();
-                textRecognizer.processImage(img)
-                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                            @Override
-                            public void onSuccess(FirebaseVisionText result) {
-                                // Task completed successfully
-                                Toast.makeText(context,"Completed", Toast.LENGTH_SHORT).show();
-                                String text = result.getText();
-                                Log.d("text",text);
-                                // ...
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        e.printStackTrace();
-                                        Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show();
-                                        // ...
-                                    }
-                                });
+                bitmanp_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            img = FirebaseVisionImage.fromBitmap(bitmanp_image);
+            FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
+                    .getOnDeviceTextRecognizer();
+            textRecognizer.processImage(img)
+                    .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                        @Override
+                        public void onSuccess(FirebaseVisionText result) {
+                            // Task completed successfully
+                            Toast.makeText(MainActivity.this,"Completed", Toast.LENGTH_SHORT).show();
+                            String text = result.getText();
+                            Log.d("text",text);
+                            // ...
+                        }
+                    })
+                    .addOnFailureListener(
+                            new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Task failed with an exception
+                                    e.printStackTrace();
+                                    Toast.makeText(MainActivity.this,"Failed", Toast.LENGTH_SHORT).show();
+                                    // ...
+                                }
+                            });
         }
     }
 }
