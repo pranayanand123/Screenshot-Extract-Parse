@@ -20,12 +20,17 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
     ImageView imgView;
     FirebaseVisionImage img;
     Bitmap bitmanp_image;
+    Pattern pattern = Pattern.compile("[A-Z]{2}[A-Z0-9]{1,2}[A-Z]{1,3}[A-Z0-9]{4}");
     //Context context = getApplicationContext();
+    String lump;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 handleSendImage(intent); // Handle single image being sent
             }
         }
+
     }
     void handleSendImage(Intent intent) {
         Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -64,8 +70,18 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(FirebaseVisionText result) {
                             // Task completed successfully
                             Toast.makeText(MainActivity.this,"Completed", Toast.LENGTH_SHORT).show();
-                            String text = result.getText();
-                            Log.d("text",text);
+                            lump = result.getText();
+                            Log.d("text",lump);
+                            Matcher matcher = pattern.matcher(lump);
+                            if (matcher.find()) {
+                                Log.d("extract", String.valueOf(matcher.start()));
+                                Log.d("extract", String.valueOf(matcher.end()));
+                                Log.d("extract", String.valueOf(matcher.group()));
+                            }else {
+                                Log.d("extract", "ERROR");
+
+                            }
+
                             // ...
                         }
                     })
