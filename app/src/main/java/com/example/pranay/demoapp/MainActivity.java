@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     String lump;
     ProgressDialog progressDialog;
     Uri imageUri;
-
+    TextView vehicleNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
         vehicleNo = (TextView) findViewById(R.id.vehicleNo);
         listViewReviews = (ListView) findViewById(R.id.listViewReviews);
         reviewList = new ArrayList<>();
+        vehicleNumber = (TextView) findViewById(R.id.vehicleNumber);
         progressDialog = new ProgressDialog(MainActivity.this);
+
 
 
 
@@ -73,9 +75,12 @@ public class MainActivity extends AppCompatActivity {
         browseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
+
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_GET_SINGLE_FILE);
             }
         });
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("image/")) {
                 imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
                 handleSendImage(imageUri); // Handle single image being sent
             }
         }
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void handleSendImage(Uri imageUri) {
+        browseButton.setVisibility(View.INVISIBLE);
         progressDialog.setMessage("Fetching details...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
@@ -111,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            vehicleNumber.setVisibility(View.VISIBLE);
+            vehicleNo.setVisibility(View.VISIBLE);
+            mainMessage.setVisibility(View.VISIBLE);
             img = FirebaseVisionImage.fromBitmap(bitmanp_image);
             FirebaseVisionTextRecognizer textRecognizer = FirebaseVision.getInstance()
                     .getOnDeviceTextRecognizer();
