@@ -7,9 +7,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,8 +39,9 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
     DatabaseReference mDatabase;
 
-
+    public static final int REQUEST_GET_SINGLE_FILE=1;
     ImageView imgView;
+    Button browseButton;
     FirebaseVisionImage img;
     TextView vehicleNo;
     ListView listViewReviews;
@@ -48,11 +52,13 @@ public class MainActivity extends AppCompatActivity {
     //Context context = getApplicationContext();
     String lump;
     ProgressDialog progressDialog;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        browseButton = (Button) findViewById(R.id.browseButton);
         //imgView = (ImageView) findViewById(R.id.imageView);
         mainMessage = (TextView) findViewById(R.id.mainMessage);
         vehicleNo = (TextView) findViewById(R.id.vehicleNo);
@@ -64,7 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        browseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"),REQUEST_GET_SINGLE_FILE);
+            }
+        });
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -72,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if (type.startsWith("image/")) {
-                handleSendImage(intent); // Handle single image being sent
+                imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                handleSendImage(imageUri); // Handle single image being sent
             }
         }
 
@@ -83,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    void handleSendImage(Intent intent) {
+    void handleSendImage(Uri imageUri) {
         progressDialog.setMessage("Fetching details...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
         if (imageUri != null) {
             // Update UI to reflect image being shared
             //imgView.setImageURI(imageUri);
@@ -168,6 +183,22 @@ public class MainActivity extends AppCompatActivity {
                                     // ...
                                 }
                             });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == REQUEST_GET_SINGLE_FILE) {
+                    // Get the url from data
+                    imageUri = data.getData();
+                }
+                handleSendImage(imageUri);
+            }
+        } catch (Exception e) {
+            Log.e("FileSelectorActivity", "File select error", e);
         }
     }
 }
