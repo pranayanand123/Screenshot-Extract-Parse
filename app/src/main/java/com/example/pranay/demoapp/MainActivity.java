@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgView;
     FirebaseVisionImage img;
     Bitmap bitmanp_image;
-    Pattern pattern = Pattern.compile("[A-Z]{2}[A-Z0-9]{1,2}[A-Z]{1,3}[A-Z0-9]{4}");
+    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}");
     //Context context = getApplicationContext();
     String lump;
 
