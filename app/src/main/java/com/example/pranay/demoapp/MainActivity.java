@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bitmanp_image;
     TextView mainMessage;
     List<Review> reviewList;
-    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}");
+    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}");
     //Context context = getApplicationContext();
     String lump;
     ProgressDialog progressDialog;
