@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     TextView mainMessage;
     List<Review> reviewList;
     Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}");
+    Pattern pattern2 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}");
     //Context context = getApplicationContext();
     String lump;
     ProgressDialog progressDialog;
@@ -133,6 +134,12 @@ public class MainActivity extends AppCompatActivity {
                             lump = result.getText();
                             Log.d("text",lump);
                             Matcher matcher = pattern.matcher(lump);
+                            Matcher matcher2 = pattern2.matcher(lump);
+                            if (matcher2.find()) {
+                                Log.d("extract2", String.valueOf(matcher2.start()));
+                                Log.d("extract2", String.valueOf(matcher2.end()));
+                                Log.d("extract2", String.valueOf(matcher2.group()));
+                            }
                             if (matcher.find()) {
                                 Log.d("extract", String.valueOf(matcher.start()));
                                 Log.d("extract", String.valueOf(matcher.end()));
