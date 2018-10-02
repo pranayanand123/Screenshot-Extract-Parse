@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}");
     Pattern pattern2 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}\n[0-9]{4}");
     Pattern pattern31 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}[A-Z]{1}[a-z]+");
-    Pattern pattern32  = Pattern.compile("(?<!OTP: )\\d{4}(?=\\s)");
+    Pattern pattern32  = Pattern.compile("(?<!OTP: )\\d{4}"); //or "(?<!OTP: )\\d{4}(?!\\s)" //
     Pattern pattern41 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}");
     Pattern pattern42  = Pattern.compile("(?<!OTP: )\\d{4}(?=\\s)");
     //Context context = getApplicationContext();
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 String fresult4 = matcher41.group()+matcher42.group();
                                 Log.d("extract4", fresult4);
-                                //vehicleNo.setText(fresult);
+                                vehicleNo.setText(fresult4);
 
 
 
