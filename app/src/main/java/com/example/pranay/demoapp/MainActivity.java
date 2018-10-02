@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,13 +46,20 @@ public class MainActivity extends AppCompatActivity {
     FirebaseVisionImage img;
     TextView vehicleNo;
     ListView listViewReviews;
+    String[] stringlist;
     Bitmap bitmanp_image;
     TextView mainMessage;
     List<Review> reviewList;
     Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}");
-    Pattern pattern2 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}");
+    Pattern pattern2 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}\n[0-9]{4}");
+    Pattern pattern31 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}[A-Z]{1}[a-z]+");
+    Pattern pattern32  = Pattern.compile("(?<!OTP: )\\d{4}(?=\\s)");
+    Pattern pattern41 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}");
+    Pattern pattern42  = Pattern.compile("(?<!OTP: )\\d{4}(?=\\s)");
     //Context context = getApplicationContext();
     String lump;
+    ArrayList joiner = new ArrayList();
+    String joined = "";
     ProgressDialog progressDialog;
     Uri imageUri;
     TextView vehicleNumber;
@@ -135,11 +143,62 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("text",lump);
                             Matcher matcher = pattern.matcher(lump);
                             Matcher matcher2 = pattern2.matcher(lump);
+                            Matcher matcher31 = pattern31.matcher(lump);
+                            Matcher matcher32 = pattern32.matcher(lump);
+                            Matcher matcher41 = pattern41.matcher(lump);
+                            Matcher matcher42 = pattern42.matcher(lump);
                             if (matcher2.find()) {
                                 Log.d("extract2", String.valueOf(matcher2.start()));
                                 Log.d("extract2", String.valueOf(matcher2.end()));
                                 Log.d("extract2", String.valueOf(matcher2.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                stringlist = matcher2.group().split("\n");
+                                String extract2 = TextUtils.join("", stringlist);
+                                Log.d("extract2", extract2);
+                                vehicleNo.setText(extract2);
+
                             }
+                            if (matcher31.find() && matcher32.find()){
+                                Log.d("extract3", String.valueOf(matcher31.start()));
+                                Log.d("extract3", String.valueOf(matcher31.end()));
+                                Log.d("extract3", String.valueOf(matcher31.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                Log.d("extract3", String.valueOf(matcher32.start()));
+                                Log.d("extract3", String.valueOf(matcher32.end()));
+                                Log.d("extract3", String.valueOf(matcher32.group()));
+                                String[] stringlist2 = matcher31.group().split("[A-Z][a-z]+");
+                                String extract3 = TextUtils.join(",", stringlist2);
+                                Log.d("extract3", extract3);
+
+                                String fresult = extract3+matcher32.group();
+                                Log.d("extract3", fresult);
+                                vehicleNo.setText(fresult);
+
+
+
+                            }
+                            if (matcher41.find() && matcher42.find()){
+                                Log.d("extract4", String.valueOf(matcher41.start()));
+                                Log.d("extract4", String.valueOf(matcher41.end()));
+                                Log.d("extract4", String.valueOf(matcher41.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                Log.d("extract4", String.valueOf(matcher42.start()));
+                                Log.d("extract4", String.valueOf(matcher42.end()));
+                                Log.d("extract4", String.valueOf(matcher42.group()));
+
+
+
+                                String fresult4 = matcher41.group()+matcher42.group();
+                                Log.d("extract4", fresult4);
+                                //vehicleNo.setText(fresult);
+
+
+
+                            }
+
                             if (matcher.find()) {
                                 Log.d("extract", String.valueOf(matcher.start()));
                                 Log.d("extract", String.valueOf(matcher.end()));
