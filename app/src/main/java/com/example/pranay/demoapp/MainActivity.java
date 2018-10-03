@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bitmanp_image;
     TextView mainMessage;
     List<Review> reviewList;
-    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}");
+    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}(?:[A-Z])?(?:[A-Z]*)?[0-9]{4}"); //"[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}"//
     Pattern pattern2 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}\n[0-9]{4}");
     Pattern pattern31 = Pattern.compile("(?m)^(AN|AP|AR|AS|BR|CH|DN|DD|DL|GA|GJ|HR|HP|JK|KA|KL|LD|MP|MH|MN|ML|MZ|NL|OR|PY|PN|RJ|SK|TN|TR|UP|WB)[0-9]{1,2}[A-Z]{1,3}[A-Z]{1}[a-z]+");
     Pattern pattern32  = Pattern.compile("(?<!OTP: )\\d{4}"); //or "(?<!OTP: )\\d{4}(?!\\s)" //
@@ -147,57 +147,9 @@ public class MainActivity extends AppCompatActivity {
                             Matcher matcher32 = pattern32.matcher(lump);
                             Matcher matcher41 = pattern41.matcher(lump);
                             Matcher matcher42 = pattern42.matcher(lump);
-                            if (matcher2.find()) {
-                                Log.d("extract2", String.valueOf(matcher2.start()));
-                                Log.d("extract2", String.valueOf(matcher2.end()));
-                                Log.d("extract2", String.valueOf(matcher2.group()));
-                                /*joiner = String.valueOf(matcher2.group()).split("\n");
-                                joined = ''.join(joiner);*/
-                                stringlist = matcher2.group().split("\n");
-                                String extract2 = TextUtils.join("", stringlist);
-                                Log.d("extract2", extract2);
-                                vehicleNo.setText(extract2);
-
-                            }
-                            if (matcher31.find() && matcher32.find()){
-                                Log.d("extract3", String.valueOf(matcher31.start()));
-                                Log.d("extract3", String.valueOf(matcher31.end()));
-                                Log.d("extract3", String.valueOf(matcher31.group()));
-                                /*joiner = String.valueOf(matcher2.group()).split("\n");
-                                joined = ''.join(joiner);*/
-                                Log.d("extract3", String.valueOf(matcher32.start()));
-                                Log.d("extract3", String.valueOf(matcher32.end()));
-                                Log.d("extract3", String.valueOf(matcher32.group()));
-                                String[] stringlist2 = matcher31.group().split("[A-Z][a-z]+");
-                                String extract3 = TextUtils.join(",", stringlist2);
-                                Log.d("extract3", extract3);
-
-                                String fresult = extract3+matcher32.group();
-                                Log.d("extract3", fresult);
-                                vehicleNo.setText(fresult);
 
 
 
-                            }
-                            if (matcher41.find() && matcher42.find()){
-                                Log.d("extract4", String.valueOf(matcher41.start()));
-                                Log.d("extract4", String.valueOf(matcher41.end()));
-                                Log.d("extract4", String.valueOf(matcher41.group()));
-                                /*joiner = String.valueOf(matcher2.group()).split("\n");
-                                joined = ''.join(joiner);*/
-                                Log.d("extract4", String.valueOf(matcher42.start()));
-                                Log.d("extract4", String.valueOf(matcher42.end()));
-                                Log.d("extract4", String.valueOf(matcher42.group()));
-
-
-
-                                String fresult4 = matcher41.group()+matcher42.group();
-                                Log.d("extract4", fresult4);
-                                vehicleNo.setText(fresult4);
-
-
-
-                            }
 
                             if (matcher.find()) {
                                 Log.d("extract", String.valueOf(matcher.start()));
@@ -235,10 +187,61 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
+                            }else if (matcher2.find()) {
+                                Log.d("extract2", String.valueOf(matcher2.start()));
+                                Log.d("extract2", String.valueOf(matcher2.end()));
+                                Log.d("extract2", String.valueOf(matcher2.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                stringlist = matcher2.group().split("\n");
+                                String extract2 = TextUtils.join("", stringlist);
+                                Log.d("extract2", extract2);
+                                vehicleNo.setText(extract2);
+                                progressDialog.dismiss();
+
+                            }else if (matcher31.find() && matcher32.find()){
+                                Log.d("extract3", String.valueOf(matcher31.start()));
+                                Log.d("extract3", String.valueOf(matcher31.end()));
+                                Log.d("extract3", String.valueOf(matcher31.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                Log.d("extract3", String.valueOf(matcher32.start()));
+                                Log.d("extract3", String.valueOf(matcher32.end()));
+                                Log.d("extract3", String.valueOf(matcher32.group()));
+                                String[] stringlist2 = matcher31.group().split("[A-Z][a-z]+");
+                                String extract3 = TextUtils.join(",", stringlist2);
+                                Log.d("extract3", extract3);
+
+                                String fresult = extract3+matcher32.group();
+                                Log.d("extract3", fresult);
+                                vehicleNo.setText(fresult);
+                                progressDialog.dismiss();
+
+
+
+                            }else if (matcher41.find() && matcher42.find()){
+                                Log.d("extract4", String.valueOf(matcher41.start()));
+                                Log.d("extract4", String.valueOf(matcher41.end()));
+                                Log.d("extract4", String.valueOf(matcher41.group()));
+                                /*joiner = String.valueOf(matcher2.group()).split("\n");
+                                joined = ''.join(joiner);*/
+                                Log.d("extract4", String.valueOf(matcher42.start()));
+                                Log.d("extract4", String.valueOf(matcher42.end()));
+                                Log.d("extract4", String.valueOf(matcher42.group()));
+
+
+
+                                String fresult4 = matcher41.group()+matcher42.group();
+                                Log.d("extract4", fresult4);
+                                vehicleNo.setText(fresult4);
+                                progressDialog.dismiss();
+
+
+
                             }else {
                                 Log.d("extract", "ERROR");
                                 mainMessage.clearComposingText();
-                                mainMessage.setText("Please enter a valid image.");
+                                mainMessage.setText("Couldn't find any pattern.");
                                 progressDialog.dismiss();
 
                             }
